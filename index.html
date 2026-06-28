@@ -4,19 +4,21 @@
   </head>
  <body>
     <div id="loader"></div>
-    <audio id="audioPlayer" controls>
+    <audio id="audioPlayer" controls loop>
       <source id="source" />
       Your browser does not support the audio element.
     </audio>
 
     <script>
       const audioUrl = new URL(location).searchParams.get("p");
+      const loopUrl = new URL(location).searchParams.get("l");
       const sourceElement = document.getElementById("source");
       const audioPlayer = document.getElementById("audioPlayer");
       const loader = document.getElementById("loader");
 
       // Set the audio source
       sourceElement.src = audioUrl;
+      if (!loopUrl) audioPlayer.loop = false;
 
       // Show the loader and hide the audio player when the audio starts loading
       audioPlayer.addEventListener('loadstart', function() {
