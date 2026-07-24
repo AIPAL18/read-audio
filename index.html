@@ -9,27 +9,44 @@
       Your browser does not support the audio element.
     </audio>
 
+    <a id="download-action">
+      <button id="download">
+        Download <span id="licence">Licence</span>
+      </button>
+    </a>
+
     <script>
-      const audioUrl = new URL(location).searchParams.get("p");
-      const loopUrl = new URL(location).searchParams.get("l");
+      const _url = new URL(location);
+      const audioUrl = _url.searchParams.get("p"); // play
+      const loopUrl = _url.searchParams.get("l"); // loop
+      const licence = _url.searchParams.get("a"); // attribution
       const sourceElement = document.getElementById("source");
       const audioPlayer = document.getElementById("audioPlayer");
       const loader = document.getElementById("loader");
+      const button = document.getElementById("download-action");
+      const licence_span = document.getElementById("licence")
 
       // Set the audio source
       sourceElement.src = audioUrl;
+      button.href = audioUrl;
+      button.download = _url.pathname;
+      licence_span.textContent += " " + licence
       if (!loopUrl) audioPlayer.loop = false;
 
       // Show the loader and hide the audio player when the audio starts loading
       audioPlayer.addEventListener('loadstart', function() {
         loader.style.display = 'block';
         audioPlayer.style.display = 'none';
+        button.style.display = 'none';
+        licence_span.style.display = 'none';
       });
 
       // Hide the loader and show the audio player when the audio is ready to play
       audioPlayer.addEventListener('canplay', function() {
         loader.style.display = 'none';
         audioPlayer.style.display = 'block';
+        button.style.display = 'block';
+        if (licence) licence_span.style.display = 'block';
       });
 
       // Hide the loader if there's an error loading the audio
